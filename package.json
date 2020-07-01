@@ -2,9 +2,10 @@
   "name": "validocs-brazil",
   "version": "1.0.0",
   "description": "For validating brazilian documents such as private person tax identification (CPF), company tax identification (cnpj), companies tax identification for each braxilian state (State Subscription/Inscrição Estadual), among others.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
