@@ -1,0 +1,34 @@
+{
+  "name": "validocs-brazil",
+  "version": "1.0.0",
+  "description": "For validating brazilian documents such as private person tax identification (CPF), company tax identification (cnpj), companies tax identification for each braxilian state (State Subscription/Inscrição Estadual), among others.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThalesMachado/validocs-brazil.git"
+  },
+  "keywords": [
+    "cpf",
+    "cnpj",
+    "brazilian",
+    "documents",
+    "documentos",
+    "brasileiros",
+    "brazilian",
+    "state",
+    "subscription",
+    "inscrição",
+    "estadual",
+    "validate",
+    "validação"
+  ],
+  "author": "Thales Machado",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThalesMachado/validocs-brazil/issues"
+  },
+  "homepage": "https://github.com/ThalesMachado/validocs-brazil#readme"
+}
