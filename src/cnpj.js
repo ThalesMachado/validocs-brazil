@@ -37,7 +37,7 @@ const calcularPrimeiroDigitoAsync = async (cnpj = '') => {
         .slice(0, 12).split('').reverse().map((item) => parseInt(item))
     return await calculaSomatorioAsync(cnpjFormatado)
     .then((somatorio) => {
-        return somatorio % 11
+        return (somatorio % 11)
     }).then((totalCalculado) => {
         return totalCalculado == 0 || totalCalculado == 1 ? 0 : 11 - totalCalculado
     }).catch((err) => err)
@@ -60,7 +60,7 @@ const calcularSegundoDigitoAsync = async (cnpj = '') => {
         .slice(0, 12).concat(primeiroDigito).split('').reverse().map((item) => parseInt(item))
         return calculaSomatorioAsync(cnpjFormatado)
     }).then(somatorio => {
-        return somatorio % 11
+        return (somatorio % 11)
     }).then(totalCalculado => {
         return totalCalculado == 0 || totalCalculado == 1 ? 0 : 11 - totalCalculado
     }).catch((err) => err)
@@ -75,12 +75,21 @@ const calcularDigitos = (cnpj = '') => {
 const calcularDigitosAsync = async (cnpj = '') =>{
     return await calcularPrimeiroDigitoAsync(cnpj)
     .then(primeiroDigito => {
-        return calcularSegundoDigitoAsync(cnpj)
-        .then(segundoDigito => {
+        return calculaSomatorioAsync(
+            cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '').slice(0, 12)
+                .concat(primeiroDigito).split('').reverse().map(item => parseInt(item))
+        ).then(somatorio => {
+            const segundoDigito =
+                ((somatorio % 11) == 0 )|| ((somatorio % 11) == 1) ?
+                0 : 11 - (somatorio % 11)
             return `${primeiroDigito}${segundoDigito}`
         }).catch((err) => err)
     }).catch((err) => err)
 }
+
+calcularDigitosAsync('150223980001').then(digitos => console.log(digitos)).catch(err => err)
+calcularPrimeiroDigitoAsync('150223980001').then(digitos => console.log(digitos)).catch(err => err)
+calcularSegundoDigitoAsync('150223980001').then(digitos => console.log(digitos)).catch(err => err)
 
 const verificarFormato = (cnpj) => {
     if (!REGEX_FORMATO_CNPJ.test(cnpj)) {
