@@ -1,1 +1,2 @@
-console.log('Teste')
+const cnpj = require('./cnpj')
+const cpf = require('./cpf')

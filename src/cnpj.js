@@ -1,4 +1,4 @@
-//TODO: Funções assíncronas
+//TODO: Formatar CNPj
 
 const REGEX_FORMATO_CNPJ = /^(\d{14}|\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2})$/gm
 const REGEX_CNPJ_NUMEROS_REPETIDOS = /^\b(\d)\1{13}\b|\b(\d)\2{1}\.\2{3}\.\2{3}\/\2{4}\-\2{2}\b$/gm
@@ -24,7 +24,7 @@ const calculaSomatorioAsync = async (arrayCNPJ = []) => {
     })
 }
 
-const calculaPrimeiroDigito = (cnpj = '') => {
+const calcularPrimeiroDigito = (cnpj = '') => {
     const cnpjFormatado = cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '')
         .slice(0, 12).split('').reverse().map((item) => parseInt(item))
     const totalCalculo = calculaSomatorio(cnpjFormatado) % 11
@@ -32,7 +32,7 @@ const calculaPrimeiroDigito = (cnpj = '') => {
 
 }
 
-const calculaPrimeiroDigitoAsync = async (cnpj = '') => {
+const calcularPrimeiroDigitoAsync = async (cnpj = '') => {
     const cnpjFormatado = cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '')
         .slice(0, 12).split('').reverse().map((item) => parseInt(item))
     return await calculaSomatorioAsync(cnpjFormatado)
@@ -44,8 +44,8 @@ const calculaPrimeiroDigitoAsync = async (cnpj = '') => {
 
 }
 
-const calculaSegundoDigito = (cnpj = '') => {
-    const primeiroDigito = calculaPrimeiroDigito(cnpj)
+const calcularSegundoDigito = (cnpj = '') => {
+    const primeiroDigito = calcularPrimeiroDigito(cnpj)
     const cnpjFormatado = cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '')
         .slice(0, 12).concat(primeiroDigito).split('').reverse().map((item) => parseInt(item))
     const totalCalculo = calculaSomatorio(cnpjFormatado) % 11
@@ -53,8 +53,8 @@ const calculaSegundoDigito = (cnpj = '') => {
 
 }
 
-const calculaSegundoDigitoAsync = async (cnpj = '') => {
-    return await calculaPrimeiroDigitoAsync(cnpj)
+const calcularSegundoDigitoAsync = async (cnpj = '') => {
+    return await calcularPrimeiroDigitoAsync(cnpj)
     .then(primeiroDigito => {
         const cnpjFormatado = cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '')
         .slice(0, 12).concat(primeiroDigito).split('').reverse().map((item) => parseInt(item))
@@ -66,23 +66,23 @@ const calculaSegundoDigitoAsync = async (cnpj = '') => {
     }).catch((err) => err)
 }
 
-const calculaDigitos = (cnpj = '') => {
-    const primeiroDigito = calculaPrimeiroDigito(cnpj)
-    const segundoDigito = calculaSegundoDigito(cnpj)
+const calcularDigitos = (cnpj = '') => {
+    const primeiroDigito = calcularPrimeiroDigito(cnpj)
+    const segundoDigito = calcularSegundoDigito(cnpj)
     return `${primeiroDigito}${segundoDigito}`
 }
 
-const calculaDigitosAsync = async (cnpj = '') =>{
-    return await calculaPrimeiroDigitoAsync(cnpj)
+const calcularDigitosAsync = async (cnpj = '') =>{
+    return await calcularPrimeiroDigitoAsync(cnpj)
     .then(primeiroDigito => {
-        return calculaSegundoDigitoAsync(cnpj)
+        return calcularSegundoDigitoAsync(cnpj)
         .then(segundoDigito => {
             return `${primeiroDigito}${segundoDigito}`
         }).catch((err) => err)
     }).catch((err) => err)
 }
 
-const verificaFormato = (cnpj) => {
+const verificarFormato = (cnpj) => {
     if (!REGEX_FORMATO_CNPJ.test(cnpj)) {
         return false
     } else if (!REGEX_CNPJ_NUMEROS_REPETIDOS.test(cnpj)) {
@@ -90,16 +90,19 @@ const verificaFormato = (cnpj) => {
     } else return true
 }
 
-const valida = (cnpj = '') => {
-    if (!verificaFormato(cnpj))
+const validar = (cnpj = '') => {
+    if (!verificarFormato(cnpj))
         return false
-    else return (cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '').substring(12) == calculaDigitos(cnpj))
+    else return (cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '').substring(12) == calcularDigitos(cnpj))
 }
 
 module.exports = {
-    verificaFormato,
-    valida,
-    calculaPrimeiroDigito,
-    calculaSegundoDigito,
-    calculaDigitos
+    verificarFormato,
+    validar,
+    calcularPrimeiroDigito,
+    calcularPrimeiroDigitoAsync,
+    calcularSegundoDigito,
+    calcularSegundoDigitoAsync,
+    calcularDigitos,
+    calcularDigitosAsync
 }
