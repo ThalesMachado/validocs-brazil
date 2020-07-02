@@ -2,7 +2,7 @@
 
 const REGEX_FORMATO_CNPJ = /^(\d{14}|\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2})$/gm
 const REGEX_CNPJ_NUMEROS_REPETIDOS = /^\b(\d)\1{13}\b|\b(\d)\2{1}\.\2{3}\.\2{3}\/\2{4}\-\2{2}\b$/gm
-const REGEX_CARACTERES_ESPECIAIS = /(\.)*(\-)*(\/)*/gm
+const REGEX_CNPJ_CARACTERES_ESPECIAIS = /(\.)*(\-)*(\/)*/gm
 
 const calculaSomatorio = (arrayCNPJ = []) => {
     arrayCNPJ[0] = arrayCNPJ[0] * 2
@@ -25,7 +25,7 @@ const calculaSomatorioAsync = async (arrayCNPJ = []) => {
 }
 
 const calcularPrimeiroDigito = (cnpj = '') => {
-    const cnpjFormatado = cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '')
+    const cnpjFormatado = cnpj.replace(REGEX_CNPJ_CARACTERES_ESPECIAIS, '')
         .slice(0, 12).split('').reverse().map((item) => parseInt(item))
     const totalCalculo = calculaSomatorio(cnpjFormatado) % 11
     return totalCalculo == 0 || totalCalculo == 1 ? 0 : 11 - totalCalculo
@@ -33,7 +33,7 @@ const calcularPrimeiroDigito = (cnpj = '') => {
 }
 
 const calcularPrimeiroDigitoAsync = async (cnpj = '') => {
-    const cnpjFormatado = cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '')
+    const cnpjFormatado = cnpj.replace(REGEX_CNPJ_CARACTERES_ESPECIAIS, '')
         .slice(0, 12).split('').reverse().map((item) => parseInt(item))
     return await calculaSomatorioAsync(cnpjFormatado)
     .then((somatorio) => {
@@ -46,7 +46,7 @@ const calcularPrimeiroDigitoAsync = async (cnpj = '') => {
 
 const calcularSegundoDigito = (cnpj = '') => {
     const primeiroDigito = calcularPrimeiroDigito(cnpj)
-    const cnpjFormatado = cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '')
+    const cnpjFormatado = cnpj.replace(REGEX_CNPJ_CARACTERES_ESPECIAIS, '')
         .slice(0, 12).concat(primeiroDigito).split('').reverse().map((item) => parseInt(item))
     const totalCalculo = calculaSomatorio(cnpjFormatado) % 11
     return totalCalculo == 0 || totalCalculo == 1 ? 0 : 11 - totalCalculo
@@ -56,7 +56,7 @@ const calcularSegundoDigito = (cnpj = '') => {
 const calcularSegundoDigitoAsync = async (cnpj = '') => {
     return await calcularPrimeiroDigitoAsync(cnpj)
     .then(primeiroDigito => {
-        const cnpjFormatado = cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '')
+        const cnpjFormatado = cnpj.replace(REGEX_CNPJ_CARACTERES_ESPECIAIS, '')
         .slice(0, 12).concat(primeiroDigito).split('').reverse().map((item) => parseInt(item))
         return calculaSomatorioAsync(cnpjFormatado)
     }).then(somatorio => {
@@ -76,7 +76,7 @@ const calcularDigitosAsync = async (cnpj = '') =>{
     return await calcularPrimeiroDigitoAsync(cnpj)
     .then(primeiroDigito => {
         return calculaSomatorioAsync(
-            cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '').slice(0, 12)
+            cnpj.replace(REGEX_CNPJ_CARACTERES_ESPECIAIS, '').slice(0, 12)
                 .concat(primeiroDigito).split('').reverse().map(item => parseInt(item))
         ).then(somatorio => {
             const segundoDigito =
@@ -102,7 +102,7 @@ const verificarFormato = (cnpj) => {
 const validar = (cnpj = '') => {
     if (!verificarFormato(cnpj))
         return false
-    else return (cnpj.replace(REGEX_CARACTERES_ESPECIAIS, '').substring(12) == calcularDigitos(cnpj))
+    else return (cnpj.replace(REGEX_CNPJ_CARACTERES_ESPECIAIS, '').substring(12) == calcularDigitos(cnpj))
 }
 
 module.exports = {
