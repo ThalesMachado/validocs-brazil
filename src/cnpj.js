@@ -68,7 +68,10 @@ const calcularSegundoDigitoAsync = async (cnpj = '') => {
 
 const calcularDigitos = (cnpj = '') => {
     const primeiroDigito = calcularPrimeiroDigito(cnpj)
-    const segundoDigito = calcularSegundoDigito(cnpj)
+    const cnpjFormatado = cnpj.replace(REGEX_CNPJ_CARACTERES_ESPECIAIS, '')
+        .slice(0, 12).concat(primeiroDigito).split('').reverse().map((item) => parseInt(item))
+    const totalCalculo = calculaSomatorio(cnpjFormatado) % 11
+    const segundoDigito = totalCalculo == 0 || totalCalculo == 1 ? 0 : 11 - totalCalculo
     return `${primeiroDigito}${segundoDigito}`
 }
 
@@ -87,14 +90,10 @@ const calcularDigitosAsync = async (cnpj = '') =>{
     }).catch((err) => err)
 }
 
-calcularDigitosAsync('150223980001').then(digitos => console.log(digitos)).catch(err => err)
-calcularPrimeiroDigitoAsync('150223980001').then(digitos => console.log(digitos)).catch(err => err)
-calcularSegundoDigitoAsync('150223980001').then(digitos => console.log(digitos)).catch(err => err)
-
 const verificarFormato = (cnpj) => {
     if (!REGEX_FORMATO_CNPJ.test(cnpj)) {
         return false
-    } else if (!REGEX_CNPJ_NUMEROS_REPETIDOS.test(cnpj)) {
+    } else if (REGEX_CNPJ_NUMEROS_REPETIDOS.test(cnpj)) {
         return false
     } else return true
 }
